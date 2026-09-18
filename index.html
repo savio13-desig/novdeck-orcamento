@@ -119,7 +119,7 @@
 
   /* ============ a folha — segue o modelo de proposta ============ */
   .sheet{container-type:inline-size;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line-2);box-shadow:0 22px 44px -28px rgba(23,24,26,.5);color:var(--ink)}
-  .sh-body{padding:clamp(1.2rem,4vw,2.5rem) clamp(1.1rem,4.4vw,2.8rem) 1.5rem;flex:1}
+  .sh-body{padding:clamp(1.2rem,4vw,2.5rem) clamp(1.1rem,4.4vw,2.8rem) 1.5rem;flex:1;display:flex;flex-direction:column}
   .sh-top{position:relative;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem}
   .sh-logo{display:grid;color:var(--stone-900)}
   .wm{font-family:var(--serif);font-weight:700;font-size:2.6rem;letter-spacing:.3em;line-height:1;color:var(--gold)}
@@ -133,47 +133,51 @@
   .sh-rule{height:2px;background:var(--stone-900);margin:1.1rem 0 .9rem}
   .sh-rule.thin{height:1px;margin:1.7rem 0 1rem}
   .sh-title{font-family:var(--sans);font-size:.68rem;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-3);margin:0 0 1.5rem;line-height:1.75}
-  .sh-who{display:flex;flex-wrap:wrap;gap:.35rem 3.2rem;font-size:.92rem}
-  .sh-line{font-size:.92rem;margin-top:.55rem;overflow-wrap:anywhere}
   .sheet b{font-weight:700}
 
   .tbl{margin-top:1.2rem}
   .tr{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,4.2fr) minmax(0,2.1fr)}
-  .tr > div{padding:.9rem 1rem;background:var(--row);border:1px solid var(--paper);font-size:.9rem;overflow-wrap:anywhere}
-  .tr.h > div{background:var(--stone-900);color:var(--gold-l);border-color:var(--stone-900);font-weight:600;letter-spacing:.3em;text-transform:uppercase;text-align:center;font-size:.66rem;padding:.9rem 1rem}
-  .tr .sv{display:grid;align-content:center}
-  .tr .v{display:grid;align-content:center;text-align:center;font-variant-numeric:tabular-nums}
+  .tr > div{padding:.8rem .4rem;border-bottom:1px solid var(--line);font-size:.9rem;overflow-wrap:anywhere}
+  .tr.h > div{background:var(--stone-900);color:var(--gold-l);border-bottom:0;font-weight:600;letter-spacing:.3em;text-transform:uppercase;text-align:left;font-size:.62rem;padding:.8rem 1rem}
+  .tr .sv{display:grid;align-content:start;padding-left:1rem}
+  .tr .v{display:grid;align-content:start;text-align:right;padding-right:1rem;font-variant-numeric:tabular-nums}
   .tr small{display:block;color:var(--ink-3);font-size:.74rem;margin-top:.1rem}
   .tr .v.pend{font-style:italic;color:var(--ink-3)}
-  .tbl .vazio{padding:1.2rem 1rem;background:var(--row);color:var(--ink-3);font-size:.9rem}
+  .tbl .vazio{padding:1.2rem 1rem;border-bottom:1px solid var(--line);color:var(--ink-3);font-size:.9rem}
   @container (max-width:560px){
     .tr{grid-template-columns:minmax(0,1fr) auto}
     .tr .ds{grid-column:1/-1;order:3}
     .tr.h .ds{display:none}
-    .tr .v{text-align:right}
+    .terms{grid-template-columns:minmax(0,1fr);gap:.1rem}
+    .terms dd{margin-bottom:.6rem}
+    .cli,.co{grid-template-columns:minmax(0,1fr)}
+    .sh-band .c,.sh-band .r{text-align:left}
     .sh-top{flex-wrap:wrap}
     .sh-who{gap:.35rem}
   }
 
   .tots{display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;margin-top:1.1rem}
-  .tbox{background:var(--row);border:1px solid var(--line);border-bottom:2px solid var(--gold);padding:.8rem 1.15rem;min-width:min(100%,18rem);text-align:right;font-variant-numeric:tabular-nums}
-  .tbox .lb{font-weight:700;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;margin-right:.55rem}
-  .tbox .vl{font-family:var(--serif);font-size:1.6rem;font-weight:700;line-height:1}
+  .tbox{display:flex;align-items:baseline;justify-content:flex-end;gap:1.2rem;text-align:right;font-variant-numeric:tabular-nums}
+  .tbox .lb{font-weight:700;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase}
+  .tbox .vl{font-family:var(--serif);font-size:1.7rem;font-weight:700;line-height:1;min-width:9.5rem;text-align:left;padding:0 .4rem .3rem 1rem;border-bottom:2px solid var(--gold)}
   .tbox.pending .vl{font-style:italic;color:var(--ink-3)}
 
-  .terms{margin-top:1.5rem;font-size:.88rem;line-height:1.9;text-align:justify;hyphens:auto;overflow-wrap:anywhere}
-  .terms p{margin:0 0 .3rem}
-  .terms ul{list-style:disc;margin:.05rem 0 .5rem;padding-left:1.2rem;display:block}
+  .terms{margin:1.7rem 0 1.4rem;border-top:1px solid var(--ink);padding-top:1rem;display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.7rem 1.4rem;font-size:.88rem;line-height:1.55;text-align:left}
+  .terms dt{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding-top:.3rem}
+  .terms dd{margin:0;overflow-wrap:anywhere}
+  .terms ul{margin:0;padding-left:1.1rem;display:block;list-style:disc}
   .terms li{display:list-item;margin:0}
-  .terms li::before{content:none}
-  .pay{font-size:.8rem;line-height:1.95}
-  .pay p{margin:0;overflow-wrap:anywhere}
-  .pay span{margin-right:1.6rem;display:inline-block}
+  .cli{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:.8rem 2.4rem;margin-top:1.3rem}
+  .co{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem 1.6rem;margin-top:auto;border-top:1px solid var(--ink);padding-top:1rem}
+  .f{min-width:0}.f.wide{grid-column:1/-1}
+  .fl{display:block;font-size:.58rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  .fv{border-bottom:1px solid var(--line);padding:.15rem 0 .3rem;font-size:.92rem;font-weight:500;min-height:1.7rem;overflow-wrap:anywhere}
+  .blank{display:inline-block;min-width:4.2rem;border-bottom:1px solid var(--ink);text-align:center;font-weight:700;color:var(--ink);line-height:1.1;vertical-align:baseline}
 
   .sh-band{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:1.3rem;background:var(--stone-900);color:var(--paper);padding:1.5rem clamp(1.1rem,4.4vw,2.8rem);font-size:.85rem;margin-top:auto}
-  .sh-band .l{font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-l)}
-  .sh-band .d{width:2px;align-self:stretch;min-height:2rem;background:var(--gold-l)}
-  .sh-band .r{font-weight:500}
+  .sh-band .l{font-family:var(--serif);font-size:1.25rem;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-l)}
+  .sh-band .c{text-align:center;font-weight:500}
+  .sh-band .r{font-weight:500;text-align:right}
   .sh-band::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--gold)}
   @container (max-width:560px){
     .sh-band{grid-template-columns:minmax(0,1fr);gap:.4rem}
@@ -303,12 +307,12 @@
 
         <section class="grp">
           <h2>Condições</h2>
-          <div class="field"><label for="q-agend">Prazo e agendamento</label><textarea id="q-agend" rows="2"></textarea><p class="hint" style="margin-top:.3rem">A validade da proposta entra sozinha ao final desse parágrafo.</p></div>
+          <div class="field"><label for="q-agend">Agendamento <span class="opt">opcional</span></label><textarea id="q-agend" rows="2"></textarea></div>
           <div class="field"><label for="q-validade">Proposta válida por</label>
             <select id="q-validade"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30">30 dias</option></select>
           </div>
           <div class="field"><label for="q-pag">Condições de pagamento</label><input id="q-pag" type="text"></div>
-          <div class="field"><label for="q-prazo">Prazo de execução <span class="opt">opcional</span></label><input id="q-prazo" type="text" placeholder="Ex.: material em 5 a 7 dias; obra em 7 a 10 dias"></div>
+          <div class="field"><label for="q-prazo">Prazo de entrega <span class="opt">opcional</span></label><input id="q-prazo" type="text" placeholder="Ex.: material em 5 a 7 dias; obra em 7 a 10 dias"></div>
           <div class="field"><label for="q-mat">Materiais e equipamentos <span class="opt">opcional</span></label><textarea id="q-mat" rows="3"></textarea></div>
           <div class="field"><label for="q-cond">Condições e garantias</label><textarea id="q-cond" rows="4"></textarea><p class="hint" style="margin-top:.3rem">Uma por linha. O texto padrão fica em “Meus dados”.</p></div>
           <div class="field"><label for="q-obs">Observações <span class="opt">opcional</span></label><textarea id="q-obs" rows="3" placeholder="Ex.: madeira e acabamento combinados com a cliente."></textarea></div>
@@ -330,22 +334,16 @@
           <div class="sh-body">
             <header class="sh-top">
               <div class="sh-logo" id="s-logo"></div>
-              <div class="sh-emit"><span class="eb">Proposta comercial</span><span class="big">Orçamento</span><span class="em"><b>Emissão:</b> <span id="s-emit"></span></span></div>
+              <div class="sh-emit"><span class="eb">Proposta comercial</span><span class="big">Orçamento</span><span class="em">Nº <span class="blank" id="s-num"></span> &nbsp;·&nbsp; Emissão <b id="s-emit"></b></span></div>
             </header>
             <div class="sh-rule"></div>
             <h3 class="sh-title" id="s-titulo"></h3>
-            <div class="sh-who">
-              <p id="s-resp-p"><b>Responsável:</b> <span id="s-resp"></span></p>
-              <p><b>Cliente:</b> <span id="s-cli"></span></p>
-            </div>
-            <p class="sh-line" id="s-end"></p>
-            <p class="sh-line" id="s-contato"></p>
-            <p class="sh-line" id="s-obra"></p>
+            <div class="cli" id="s-cli"></div>
 
             <div class="tbl" id="s-tbl"></div>
             <div class="tots" id="s-tot"></div>
-            <div class="terms" id="s-terms"></div>
-            <div id="s-pay-wrap"><div class="sh-rule thin"></div><div class="pay" id="s-pay"></div></div>
+            <dl class="terms" id="s-terms"></dl>
+            <div class="co" id="s-pay"></div>
           </div>
           <footer class="sh-band" id="s-band"></footer>
         </article>
@@ -396,7 +394,7 @@
             <div><label for="s-cidade">Cidade padrão</label><input id="s-cidade" type="text"></div>
             <div><label for="s-uf">UF</label><input id="s-uf" type="text" maxlength="2"></div>
           </div>
-          <div><label for="s-rodape">Texto do rodapé</label><input id="s-rodape" type="text" placeholder="Ex.: Decks de madeira &amp; pisos · @novdeckoficial"></div>
+          <div><label for="s-rodape">Texto do rodapé</label><input id="s-rodape" type="text" placeholder="Ex.: @novdeckoficial"></div>
         </div>
         <div class="field">
           <label for="s-logo-file">Trocar logo <span class="opt">o logo da Novdeck já vem instalado</span></label>
@@ -405,12 +403,13 @@
         </div>
       </section>
       <section class="grp">
-        <h2>Dados de pagamento <span class="opt">opcional</span></h2>
-        <p class="hint" style="margin-bottom:.8rem">Só o que você preencher aparece no orçamento.</p>
+        <h2>Dados da empresa e pagamento</h2>
+        <p class="hint" style="margin-bottom:.8rem">Aparecem no bloco acima do rodapé de todo orçamento. O que ficar em branco sai como linha vazia.</p>
         <div class="field cols2">
-          <div><label for="s-titular">Titular</label><input id="s-titular" type="text"></div>
-          <div><label for="s-doc">CPF ou CNPJ</label><input id="s-doc" type="text"></div>
+          <div><label for="s-titular">Razão social</label><input id="s-titular" type="text"></div>
+          <div><label for="s-doc">CNPJ</label><input id="s-doc" type="text"></div>
         </div>
+        <div class="field"><label for="s-endereco">Endereço da empresa</label><input id="s-endereco" type="text"></div>
         <div class="field cols2">
           <div><label for="s-banco">Banco</label><input id="s-banco" type="text"></div>
           <div><label for="s-agencia">Agência</label><input id="s-agencia" type="text" inputmode="numeric"></div>
@@ -423,14 +422,14 @@
       <section class="grp">
         <h2>Padrões de todo orçamento novo</h2>
         <div class="field"><label for="s-titulo-cfg">Título</label><input id="s-titulo-cfg" type="text"></div>
-        <div class="field"><label for="s-agend">Prazo e agendamento</label><textarea id="s-agend" rows="2"></textarea></div>
+        <div class="field"><label for="s-agend">Agendamento <span class="opt">opcional</span></label><textarea id="s-agend" rows="2"></textarea></div>
         <div class="field cols2">
           <div><label for="s-pag">Condições de pagamento</label><input id="s-pag" type="text"></div>
           <div><label for="s-validade">Proposta válida por</label>
             <select id="s-validade"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30">30 dias</option></select>
           </div>
         </div>
-        <div class="field"><label for="s-prazo">Prazo de execução <span class="opt">opcional</span></label><input id="s-prazo" type="text"></div>
+        <div class="field"><label for="s-prazo">Prazo de entrega <span class="opt">opcional</span></label><input id="s-prazo" type="text"></div>
         <div class="field"><label for="s-mat">Materiais e equipamentos</label><textarea id="s-mat" rows="3"></textarea></div>
         <div class="field"><label for="s-cond">Condições e garantias</label><textarea id="s-cond" rows="5" placeholder="Deixe em branco se não quiser nenhuma"></textarea><p class="hint" style="margin-top:.3rem">Uma por linha. Só coloque o que você realmente cumpre.</p></div>
       </section>
@@ -470,10 +469,10 @@
   var LOGO_PADRAO = 'data:image/jpeg;base64,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';
   var DEFAULT_SETTINGS = {
     empresa:'Novdeck', nome:'', fone:'(11) 98141-8556', email:'',
-    cidade:'São Paulo', uf:'SP', rodape:'Decks de madeira & pisos · @novdeckoficial', logo:LOGO_PADRAO,
-    titular:'', doc:'', banco:'', agencia:'', conta:'', pix:'',
+    cidade:'São Paulo', uf:'SP', rodape:'@novdeckoficial', logo:LOGO_PADRAO,
+    titular:'', doc:'', endereco:'', banco:'', agencia:'', conta:'', pix:'',
     titulo:'Decks de madeira e pisos',
-    agend:'A execução é realizada mediante agendamento, conforme disponibilidade.',
+    agend:'',
     pagamento:'A combinar.', validade:30, prazo:'', mat:'', condicoes:''
   };
 
@@ -590,7 +589,7 @@
   }
   function validadeTxt(x){
     var n = x.validade || 30;
-    return 'Validade desta proposta: ' + n + ' (' + (EXTENSO[n] || n) + ') dias corridos a partir da data de emissão.';
+    return n + ' (' + (EXTENSO[n] || n) + ') dias corridos a partir da data de emissão.';
   }
 
   /* ================= texto do WhatsApp ================= */
@@ -618,7 +617,7 @@
     L.push('');
     L.push('*Valor total:* ' + (t.has ? fmtBRL.format(t.total) : 'a definir'));
     if(x.pagamento) L.push('*Pagamento:* ' + x.pagamento);
-    if(x.prazo) L.push('*Prazo de execução:* ' + x.prazo);
+    if(x.prazo) L.push('*Prazo de entrega:* ' + x.prazo);
     if(x.mat) L.push('*Materiais e equipamentos:* ' + x.mat);
     var conds = linhas(x.condicoes);
     if(conds.length){ L.push(''); L.push('*Condições e garantias:*'); conds.forEach(function(c){ L.push('• ' + c); }); }
@@ -640,27 +639,23 @@
       ? '<img class="lg-img" src="' + settings.logo + '" alt="' + esc(emp) + '">'
       : '<span class="wm">' + esc(partes[0] || '') + '</span>' + (partes.length > 1 ? '<span class="wm-sub">' + esc(partes.slice(1).join(' ')) + '</span>' : '');
 
-    $('s-emit').textContent = fmtDate(new Date(q.criado)) + (q.num ? ' · Nº ' + pad(q.num) : '');
+    $('s-num').textContent = q.num ? pad(q.num) : '';
+    $('s-emit').textContent = fmtDate(new Date(q.criado));
     $('s-titulo').textContent = q.titulo || '';
     $('s-titulo').hidden = !q.titulo;
-    $('s-resp').textContent = settings.nome || '';
-    $('s-resp-p').hidden = !settings.nome;
-    $('s-cli').textContent = q.cliente || '—';
 
-    var end = enderecoTxt(q);
-    $('s-end').innerHTML = end ? '<b>Endereço:</b> ' + esc(end) : '';
-    $('s-end').hidden = !end;
-    var contato = [];
-    if(q.fone) contato.push('<b>Telefone:</b> ' + esc(q.fone));
-    if(q.email) contato.push('<b>E-mail:</b> ' + esc(q.email));
-    if(q.doc) contato.push('<b>CPF/CNPJ:</b> ' + esc(q.doc));
-    $('s-contato').innerHTML = contato.join(' &nbsp;·&nbsp; ');
-    $('s-contato').hidden = !contato.length;
-    var ob = obraTxt(q);
-    $('s-obra').innerHTML = ob ? '<b>Obra:</b> ' + esc(ob) : '';
-    $('s-obra').hidden = !ob;
+    function cel(rot, val, wide){
+      return '<div class="f' + (wide ? ' wide' : '') + '"><span class="fl">' + esc(rot) + '</span><div class="fv">' + esc(val || '') + '</div></div>';
+    }
+    var cid = [q.cidade, q.uf].filter(Boolean).join(' / ');
+    var cli = cel('Cliente', q.cliente, true) + cel('Endereço da obra', q.end) + cel('Bairro', q.bairro) +
+      cel('Cidade / UF', cid) + cel('Celular', q.fone);
+    if(q.email) cli += cel('E-mail', q.email);
+    if(q.doc) cli += cel('CPF / CNPJ', q.doc);
+    cli += cel('Responsável técnico', settings.nome) + cel('Obra', obraTxt(q));
+    $('s-cli').innerHTML = cli;
 
-    var rows = '<div class="tr h"><div>Serviço</div><div class="ds">Descrição</div><div>Valor</div></div>';
+    var rows = '<div class="tr h"><div>Serviço</div><div class="ds">Descrição</div><div class="v">Valor</div></div>';
     if(!q.itens.length){
       rows += '<div class="vazio">Nenhum item ainda. Adicione serviços e materiais ao lado.</div>';
     } else {
@@ -669,40 +664,29 @@
         var det = it.preco && qtd !== 1 ? fmtDim.format(qtd) + (it.un ? ' ' + esc(it.un) : '') + ' × ' + fmtBRL.format(it.preco) : '';
         rows += '<div class="tr"><div class="sv"><span>' + esc(it.nome || 'Item sem nome') + '</span>' + (det ? '<small>' + det + '</small>' : '') + '</div>' +
           '<div class="ds">' + esc(it.desc || '') + '</div>' +
-          (it.preco
-            ? '<div class="v"><span>' + fmtBRL.format(tot) + '</span>' + '</div>'
-            : '<div class="v pend">a combinar</div>') + '</div>';
+          (it.preco ? '<div class="v"><span>' + fmtBRL.format(tot) + '</span></div>' : '<div class="v pend">a combinar</div>') + '</div>';
       });
     }
     $('s-tbl').innerHTML = rows;
 
-    var box = t.has
-      ? '<div class="tbox"><span class="lb">Valor total:</span><span class="vl">' + fmtBRL.format(t.total) + '</span></div>'
-      : '<div class="tbox pending"><span class="lb">Valor total:</span><span class="vl">a definir</span></div>';
-    $('s-tot').innerHTML = box;
+    $('s-tot').innerHTML = t.has
+      ? '<div class="tbox"><span class="lb">Valor total</span><span class="vl">' + fmtBRL.format(t.total) + '</span></div>'
+      : '<div class="tbox pending"><span class="lb">Valor total</span><span class="vl">a definir</span></div>';
 
-    var terms = par('Prazo e agendamento', ((q.agend ? q.agend.trim() + ' ' : '') + validadeTxt(q)).trim());
-    terms += par('Condições de pagamento', q.pagamento);
-    terms += par('Prazo de execução', q.prazo);
-    terms += par('Materiais e equipamentos', q.mat);
+    function dd(rot, html){ return html ? '<dt>' + esc(rot) + '</dt><dd>' + html + '</dd>' : ''; }
+    var terms = dd('Condições de pagamento', esc(q.pagamento || '')) + dd('Prazo de entrega', esc(q.prazo || '')) + dd('Validade', esc(validadeTxt(q))) +
+      dd('Agendamento', esc(q.agend || '')) + dd('Materiais e equipamentos', esc(q.mat || ''));
     var conds = linhas(q.condicoes);
-    if(conds.length) terms += '<p><b>Condições e garantias:</b></p><ul>' + conds.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>';
-    terms += par('Observações', q.obs);
+    if(conds.length) terms += dd('Condições e garantias', '<ul>' + conds.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>');
+    terms += dd('Observações', esc(q.obs || ''));
     $('s-terms').innerHTML = terms;
 
-    var pay = '', l1 = [], l2 = [], l3 = [];
-    if(settings.titular) l1.push('<span><b>Titular:</b> ' + esc(settings.titular) + '</span>');
-    if(settings.doc) l1.push('<span><b>CPF/CNPJ:</b> ' + esc(settings.doc) + '</span>');
-    if(settings.banco) l2.push('<span><b>Banco:</b> ' + esc(settings.banco) + '</span>');
-    if(settings.agencia) l2.push('<span><b>Agência:</b> ' + esc(settings.agencia) + '</span>');
-    if(settings.conta) l2.push('<span><b>Conta corrente:</b> ' + esc(settings.conta) + '</span>');
-    if(settings.pix) l3.push('<span><b>Chave Pix:</b> ' + esc(settings.pix) + '</span>');
-    [l1, l2, l3].forEach(function(l){ if(l.length) pay += '<p>' + l.join('') + '</p>'; });
-    $('s-pay').innerHTML = pay;
-    $('s-pay-wrap').hidden = !pay;
+    var conta = [settings.conta, settings.pix ? 'PIX ' + settings.pix : ''].filter(Boolean).join(' · ');
+    $('s-pay').innerHTML = cel('Razão social', settings.titular) + cel('CNPJ', settings.doc) + cel('Endereço', settings.endereco) +
+      cel('Banco', settings.banco) + cel('Agência', settings.agencia) + cel('Conta / PIX', conta);
 
-    $('s-band').innerHTML = '<div class="l">' + esc(emp) + (settings.fone ? ' &nbsp;' + esc(settings.fone) : '') + '</div><div class="d"></div><div class="r">' +
-      esc(settings.rodape || [settings.cidade, settings.uf].filter(Boolean).join(' / ')) + '</div>';
+    $('s-band').innerHTML = '<div class="l">' + esc(emp) + '</div><div class="c">' + (settings.fone ? 'WhatsApp ' + esc(settings.fone) : '') + '</div><div class="r">' +
+      esc(settings.rodape || '') + '</div>';
 
     $('stamp').hidden = !isExample;
     $('exemplo').hidden = !isExample;
@@ -974,7 +958,7 @@
 
   /* ================= meus dados ================= */
   var SMAP = { 's-empresa':'empresa', 's-nome':'nome', 's-fone':'fone', 's-email':'email', 's-cidade':'cidade', 's-uf':'uf', 's-rodape':'rodape',
-               's-titular':'titular', 's-doc':'doc', 's-banco':'banco', 's-agencia':'agencia', 's-conta':'conta', 's-pix':'pix',
+               's-titular':'titular', 's-doc':'doc', 's-banco':'banco', 's-agencia':'agencia', 's-endereco':'endereco', 's-conta':'conta', 's-pix':'pix',
                's-titulo-cfg':'titulo', 's-agend':'agend', 's-pag':'pagamento', 's-prazo':'prazo', 's-mat':'mat', 's-cond':'condicoes' };
   function fillSettings(){
     Object.keys(SMAP).forEach(function(id){ $(id).value = settings[SMAP[id]] || ''; });
