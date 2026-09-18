@@ -214,6 +214,11 @@
 
   .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 1.2rem);transform:translateX(-50%);background:var(--stone-900);color:var(--paper);padding:.7rem 1.1rem;font-size:.9rem;z-index:50;max-width:calc(100vw - 32px)}
 
+  /* medição da folha no tamanho A4 (usada só para calcular o ajuste de impressão) */
+  .sheet.pm{width:210mm!important;min-height:0!important}
+  .sheet.pm .sh-body{padding:14mm 16mm 6mm;zoom:1!important}
+  .sheet.pm .sh-band{padding:8mm 16mm;zoom:1!important}
+
   @media print{
     @page{size:A4;margin:0}
     html,body{background:#fff}
@@ -225,6 +230,8 @@
     .sheet{width:210mm;min-height:296mm;background:var(--paper);border:0;box-shadow:none;margin:0}
     .sh-body{padding:14mm 16mm 6mm}
     .sh-band{padding:8mm 16mm}
+    .sh-body,.sh-band{zoom:var(--fit,1)}
+    .co,.tr,.tots,.terms dt,.terms dd{break-inside:avoid}
   }
 </style>
 </head>
@@ -494,6 +501,13 @@
   }
 
   var settings = Object.assign({}, DEFAULT_SETTINGS, load(K.settings, {}));
+  var AGEND_ANTIGO = 'A execução é realizada mediante agendamento, conforme disponibilidade.';
+  (function(){
+    var mudou = false;
+    if(settings.agend === AGEND_ANTIGO){ settings.agend = ''; mudou = true; }
+    if(settings.rodape === 'Decks de madeira & pisos · @novdeckoficial'){ settings.rodape = '@novdeckoficial'; mudou = true; }
+    if(mudou) save(K.settings, settings);
+  })();
   var catalog = load(K.catalog, null); if(!Array.isArray(catalog) || !catalog.length) catalog = seedCatalog();
   catalog.forEach(function(c){ if(c.desc == null) c.desc = ''; });
   var history = load(K.history, []); if(!Array.isArray(history)) history = [];
@@ -644,12 +658,13 @@
     $('s-titulo').textContent = q.titulo || '';
     $('s-titulo').hidden = !q.titulo;
 
-    function cel(rot, val, wide){
+    function cel(rot, val, wide, fixo){
+      if(!val && !fixo) return '';
       return '<div class="f' + (wide ? ' wide' : '') + '"><span class="fl">' + esc(rot) + '</span><div class="fv">' + esc(val || '') + '</div></div>';
     }
     var cid = [q.cidade, q.uf].filter(Boolean).join(' / ');
-    var cli = cel('Cliente', q.cliente, true) + cel('Endereço da obra', q.end) + cel('Bairro', q.bairro) +
-      cel('Cidade / UF', cid) + cel('Celular', q.fone);
+    var cli = cel('Cliente', q.cliente, true, true) + cel('Endereço da obra', q.end, false, true) + cel('Bairro', q.bairro, false, true) +
+      cel('Cidade / UF', cid, false, true) + cel('Celular', q.fone, false, true);
     if(q.email) cli += cel('E-mail', q.email);
     if(q.doc) cli += cel('CPF / CNPJ', q.doc);
     cli += cel('Responsável técnico', settings.nome) + cel('Obra', obraTxt(q));
@@ -682,8 +697,10 @@
     $('s-terms').innerHTML = terms;
 
     var conta = [settings.conta, settings.pix ? 'PIX ' + settings.pix : ''].filter(Boolean).join(' · ');
-    $('s-pay').innerHTML = cel('Razão social', settings.titular) + cel('CNPJ', settings.doc) + cel('Endereço', settings.endereco) +
+    var pay = cel('Razão social', settings.titular) + cel('CNPJ', settings.doc) + cel('Endereço', settings.endereco) +
       cel('Banco', settings.banco) + cel('Agência', settings.agencia) + cel('Conta / PIX', conta);
+    $('s-pay').innerHTML = pay;
+    $('s-pay').hidden = !pay;
 
     $('s-band').innerHTML = '<div class="l">' + esc(emp) + '</div><div class="c">' + (settings.fone ? 'WhatsApp ' + esc(settings.fone) : '') + '</div><div class="r">' +
       esc(settings.rodape || '') + '</div>';
@@ -697,7 +714,7 @@
     $('btn-save').disabled = isExample;
     $('dica').textContent = isExample
       ? 'Este é um exemplo. Toque em qualquer campo ou em “Novo orçamento” para começar o seu.'
-      : (pronto ? 'Pronto. Para mandar em PDF: “Imprimir ou PDF” → salvar como PDF → anexar no WhatsApp.' : 'Adicione ao menos um item com valor para liberar os botões.');
+      : (pronto ? (pendencias(true).length ? 'Antes de enviar, falta: ' + pendencias(true).join('; ') + '.' : 'Pronto. Para mandar em PDF: “Imprimir ou PDF” → salvar como PDF → anexar no WhatsApp.') : 'Adicione ao menos um item com valor para liberar os botões.');
   }
 
   function refresh(){
@@ -832,8 +849,69 @@
     if(!silent) renderSheet();
   }
 
+  /* ================= ajuste para caber em uma página A4 ================= */
+  function fitPrint(){
+    var sh = $('sheet'), root = document.documentElement;
+    root.style.setProperty('--fit', '1');
+    sh.classList.add('pm');
+    var h = sh.scrollHeight;
+    sh.classList.remove('pm');
+    var alvo = 296 * 96 / 25.4, fit = 1;
+    if(h > alvo) fit = Math.max(0.72, Math.floor(alvo / h * 100) / 100);
+    root.style.setProperty('--fit', String(fit));
+  }
+  window.addEventListener('beforeprint', fitPrint);
+
+  /* ================= conferência antes de enviar ================= */
+  function pendencias(paraPdf){
+    var f = [];
+    if(!String(q.cliente || '').trim()) f.push('nome do cliente');
+    if(!String(q.end || '').trim()) f.push('endereço da obra');
+    if(!digits(q.fone)) f.push('celular do cliente');
+    if(paraPdf){
+      if(!settings.titular && !settings.doc) f.push('razão social e CNPJ da empresa (em “Meus dados”)');
+      else if(!settings.titular) f.push('razão social da empresa (em “Meus dados”)');
+      else if(!settings.doc) f.push('CNPJ da empresa (em “Meus dados”)');
+      if(!settings.banco && !settings.conta && !settings.pix) f.push('dados de pagamento: banco, conta ou Pix (em “Meus dados”)');
+    }
+    return f;
+  }
+  function confirmar(paraPdf){
+    var f = pendencias(paraPdf);
+    if(!f.length) return true;
+    return window.confirm('Ainda falta preencher:\n\n• ' + f.join('\n• ') + '\n\nGerar mesmo assim?');
+  }
+
+  /* ================= formatação ao sair do campo ================= */
+  var MINUSC = { de:1, da:1, do:1, das:1, dos:1, e:1, em:1, na:1, no:1 };
+  function titulo(v){
+    v = String(v || '').replace(/\s+/g, ' ').replace(/,(?=\S)/g, ', ').trim();
+    return v.split(' ').map(function(w, i){
+      var lw = w.toLowerCase();
+      if(i > 0 && MINUSC[lw]) return lw;
+      if(w.length > 3 && w === w.toUpperCase() && !/\d/.test(w)) w = lw;
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
+  }
+  function fmtFone(v){
+    var d = digits(v);
+    if(d.length === 13 && d.indexOf('55') === 0) d = d.slice(2);
+    if(d.length === 11) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+    if(d.length === 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return String(v || '').trim();
+  }
+  [['c-nome', 'cliente'], ['c-end', 'end'], ['c-bairro', 'bairro'], ['c-cidade', 'cidade']].forEach(function(m){
+    $(m[0]).addEventListener('blur', function(){ var v = titulo(this.value); this.value = v; q[m[1]] = v; refresh(); });
+  });
+  $('c-fone').addEventListener('blur', function(){ var v = fmtFone(this.value); this.value = v; q.fone = v; refresh(); });
+  $('s-fone').addEventListener('blur', function(){ var v = fmtFone(this.value); this.value = v; settings.fone = v; save(K.settings, settings); if(q) renderSheet(); });
+  [['s-nome', 'nome'], ['s-endereco', 'endereco']].forEach(function(m){
+    $(m[0]).addEventListener('blur', function(){ var v = titulo(this.value); this.value = v; settings[m[1]] = v; save(K.settings, settings); if(q) renderSheet(); });
+  });
+
   /* ================= ações ================= */
   $('btn-wa').addEventListener('click', function(){
+    if(!confirmar(false)) return;
     commit(false);
     var tel = digits(q.fone);
     if(tel && tel.length <= 11) tel = '55' + tel;
@@ -853,9 +931,11 @@
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(fim, alternativa); }
     else { alternativa(); }
   }
-  $('btn-copy').addEventListener('click', function(){ commit(false); copiar(waText(q)); });
+  $('btn-copy').addEventListener('click', function(){ if(!confirmar(false)) return; commit(false); copiar(waText(q)); });
   $('btn-print').addEventListener('click', function(){
+    if(!confirmar(true)) return;
     commit(false);
+    fitPrint();
     try{ window.print(); }catch(e){ toast('Use Ctrl+P (ou o menu do navegador) para imprimir.'); }
   });
   $('btn-save').addEventListener('click', function(){ commit(false); toast('Salvo no histórico.'); });
@@ -1028,7 +1108,7 @@
   /* ================= início ================= */
   fillSettings();
   var draft = load(K.draft, null);
-  if(draft && draft.itens){ q = normalizeQuote(draft); isExample = false; }
+  if(draft && draft.itens){ q = normalizeQuote(draft); isExample = false; if(q.agend === AGEND_ANTIGO) q.agend = ''; }
   else { q = exampleQuote(); isExample = true; }
   show('orc');
   fillForm();
